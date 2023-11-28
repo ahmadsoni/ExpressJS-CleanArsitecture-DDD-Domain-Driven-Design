@@ -5,6 +5,10 @@ import knexConfig from '@/src/knexfile'
 import bodyParser from 'body-parser'
 import { hashPassword, comparePassword, generateJWT } from '@/src/utils'
 import authMiddleware from '@/src/middleware/auth'
+import { newCategoryRepository, newCouponRepository, newProductRepository, newUserRepository } from '@/src/modules/repository'
+import { newCategoryUseCase, newCouponUseCase, newProductUseCase, newUserUseCase } from '@/src/modules/usecase'
+import { newCategoryDelivery, newCouponDelivery, newProductDelivery, newUserDelivery } from '@/src/modules/delivery'
+
 dotenv.config()
 
 const app: Application = express()
@@ -74,100 +78,27 @@ app.post('/auth/register', async (req: Request, res: Response) => {
 })
 
 app.use(authMiddleware)
-app.get('/products', async (_req: Request, res: Response) => {
-  try {
-    const products = await knexInstance.table('products')
-    res.send({
-      data: products
-    })
-  } catch (error) {
-    res.status(500).send({ error: 'Failed to fetch products' })
-  }
-})
 
-app.post('/products', async (req: Request, res: Response) => {
-  const { title, description, image, price } = req.body
+// catergory domain
+const categoriesRepository = newCategoryRepository(knexInstance)
+const categoriesUseCase = newCategoryUseCase(categoriesRepository)
+newCategoryDelivery(app, categoriesUseCase)
 
-  if (!title || !description || !image || !price) {
-    return res.status(400).json({ error: 'Missing required fields' })
-  }
+// coupon domain
+const couponsRepository = newCouponRepository(knexInstance)
+const couponsUseCase = newCouponUseCase(couponsRepository)
+newCouponDelivery(app, couponsUseCase)
 
-  await knexInstance.table('products').insert({
-    title,
-    description,
-    price,
-    image
-  }).then(() => {
-    res.send({
-      data: [],
-      message: 'Success'
-    })
-  }).catch((error) => {
-    res.status(500).json({ error: `Database insertion failed: ${error.message}` })
-  })
-})
-
-app.delete('/products/:id', async (req: Request, res: Response) => {
-  await knexInstance.table('products').where('id', req.params.id).del().then((data) => {
-    res.send({
-      data,
-      message: 'Success'
-    })
-  })
-})
+// product domain
+const productsRepository = newProductRepository(knexInstance)
+const productsUseCase = newProductUseCase(productsRepository)
+newProductDelivery(app, productsUseCase)
 
 // user routes
-app.get('/users', async (_req: Request, res: Response) => {
-  await knexInstance.select().table('users').then((data) => {
-    res.send({
-      data: {
-        name: data[0].name,
-        email: data[0].email,
-        phone: data[0].phone
-      }
-    })
-  })
-})
+const usersRepository = newUserRepository(knexInstance)
+const usersUseCase = newUserUseCase(usersRepository)
+newUserDelivery(app, usersUseCase)
 
-app.delete('/users/:id', async (req: Request, res: Response) => {
-  await knexInstance.table('users').where('id', req.params.id).del().then((data) => {
-    res.send({
-      data,
-      message: 'Success'
-    })
-  })
-})
-
-app.put('/users/:id', async (req: Request, res: Response) => {
-  const { name, email, password, phone } = req.body
-
-  if (!name || !email || !password || !phone) {
-    return res.status(400).json({ error: 'Missing required fields' })
-  }
-
-  await knexInstance.table('users').where('id', req.params.id).update({
-    name,
-    email,
-    password,
-    phone
-  }).then(() => {
-    res.send({
-      data: [],
-      message: 'Success'
-    })
-  }).catch((error) => {
-    res.status(500).json({ error: `Database insertion failed: ${error.message}` })
-  })
-})
-// catergory domain
-app.get('/categories', async (_req: Request, res: Response) => {
-  await knexInstance.select().table('categories').then((data) => {
-    res.send({
-      data
-    })
-  })
-})
-// auth domain
 app.listen(port, () => {
   console.log(`Server is Fire at http://localhost:${port}`)
 })
