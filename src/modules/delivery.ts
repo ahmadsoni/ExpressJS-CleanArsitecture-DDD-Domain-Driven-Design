@@ -3,10 +3,13 @@ import type CategoryUseCase from '@/src/modules/category/usecase/CategoryUseCase
 import type CouponUseCase from '@/src/modules/coupon/usecase/CouponUseCase'
 import type ProductUseCase from '@/src/modules/product/usecase/ProductUseCase'
 import type UserUseCase from '@/src/modules/user/usecase/UserUseCase'
+import type AuthUseCase from '@/src/modules/auth/usecase/AuthUseCase'
 import CategoryDelivery from '@/src/modules/category/delivery/CategoryDelivery'
 import CouponDelivery from '@/src/modules/coupon/delivery/CouponDelivery'
 import ProductDelivery from '@/src/modules/product/delivery/ProductDelivery'
 import UserDelivery from '@/src/modules/user/delivery/UserDelivery'
+import AuthDelivery from '@/src/modules/auth/delivery/AuthDelivery'
+
 const newCategoryDelivery = (app: Application, usecase: CategoryUseCase): void => {
   const delivery = new CategoryDelivery(usecase)
   app.get('/categories', delivery.getAllCategories)
@@ -40,4 +43,12 @@ const newUserDelivery = (app: Application, usecase: UserUseCase): void => {
   app.post('/users', delivery.createAccount)
   app.put('/users', delivery.updateAccount)
 }
-export { newCategoryDelivery, newCouponDelivery, newProductDelivery, newUserDelivery }
+
+const newAuthDelivery = (app: Application, usecase: AuthUseCase): void => {
+  const delivery = new AuthDelivery(usecase)
+  app.post('/auth/login', delivery.login)
+  app.post('/auth/register', delivery.register)
+  app.post('/auth/logout', delivery.logout)
+}
+
+export { newCategoryDelivery, newCouponDelivery, newProductDelivery, newUserDelivery, newAuthDelivery }
