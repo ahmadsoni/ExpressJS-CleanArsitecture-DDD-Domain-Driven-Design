@@ -4,9 +4,15 @@ const config: Record<string, Knex.Config> = {
   development: {
     client: 'sqlite3',
     connection: {
-      filename: './src/dev.sqlite3'
+      filename: './src/database/dev.sqlite3'
     },
-    useNullAsDefault: true
+    useNullAsDefault: true,
+    migrations: {
+      directory: './knek/migrations'
+    },
+    seeds: {
+      directory: './knek/seeds'
+    }
   },
   staging: {
     client: 'postgresql',
@@ -18,6 +24,12 @@ const config: Record<string, Knex.Config> = {
     pool: {
       min: 2,
       max: 10
+    },
+    migrations: {
+      directory: './knek/migrations'
+    },
+    seeds: {
+      directory: './knek/seeds'
     }
   },
   production: {
@@ -30,6 +42,12 @@ const config: Record<string, Knex.Config> = {
     pool: {
       min: 2,
       max: 10
+    },
+    migrations: {
+      directory: './knek/migrations'
+    },
+    seeds: {
+      directory: './knek/seeds'
     }
   }
 }

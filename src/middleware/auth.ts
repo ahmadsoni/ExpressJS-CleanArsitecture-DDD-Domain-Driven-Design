@@ -1,6 +1,6 @@
 import type jwt from 'jsonwebtoken'
 import { type Request, type Response, type NextFunction } from 'express'
-import { verifyJWT } from '@/src/utils'
+import { verifyJWT } from '@/src/utils/authUtils'
 
 declare global {
   namespace Express {

@@ -1,7 +1,6 @@
 import { type Knex } from 'knex'
 
 export async function seed (knex: Knex): Promise<void> {
-  // Deletes ALL existing entries
   await knex('products').del()
   await knex('products').insert([
     { id: 1, title: 'title 1', description: 'tech 1', image: 'https://source.unsplash.com/category/nature/200x300', price: 10000 },

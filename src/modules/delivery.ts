@@ -4,11 +4,13 @@ import type CouponUseCase from '@/src/modules/coupon/usecase/CouponUseCase'
 import type ProductUseCase from '@/src/modules/product/usecase/ProductUseCase'
 import type UserUseCase from '@/src/modules/user/usecase/UserUseCase'
 import type AuthUseCase from '@/src/modules/auth/usecase/AuthUseCase'
+import type CartUseCase from '@/src/modules/cart/usecase/CartUseCase'
 import CategoryDelivery from '@/src/modules/category/delivery/CategoryDelivery'
 import CouponDelivery from '@/src/modules/coupon/delivery/CouponDelivery'
 import ProductDelivery from '@/src/modules/product/delivery/ProductDelivery'
 import UserDelivery from '@/src/modules/user/delivery/UserDelivery'
 import AuthDelivery from '@/src/modules/auth/delivery/AuthDelivery'
+import CartDelivery from '@/src/modules/cart/delivery/CartDelivery'
 
 const newCategoryDelivery = (app: Application, usecase: CategoryUseCase): void => {
   const delivery = new CategoryDelivery(usecase)
@@ -51,4 +53,13 @@ const newAuthDelivery = (app: Application, usecase: AuthUseCase): void => {
   app.post('/auth/logout', delivery.logout)
 }
 
-export { newCategoryDelivery, newCouponDelivery, newProductDelivery, newUserDelivery, newAuthDelivery }
+const newCartDelivery = (app: Application, usecase: CartUseCase): void => {
+  const delivery = new CartDelivery(usecase)
+  app.get('/cart/all', delivery.getAllCarts)
+  app.get('/cart/:id', delivery.getCartById)
+  app.put('/cart/:id', delivery.updateCart)
+  app.delete('/cart/:id', delivery.deleteCart)
+  app.post('/cart', delivery.addCart)
+  app.delete('/cart', delivery.deleteAllCarts)
+}
+export { newCategoryDelivery, newCouponDelivery, newProductDelivery, newUserDelivery, newAuthDelivery, newCartDelivery }

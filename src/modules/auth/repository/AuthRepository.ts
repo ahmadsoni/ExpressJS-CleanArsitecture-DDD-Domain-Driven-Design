@@ -1,7 +1,6 @@
 import { type Knex } from 'knex'
 import type { IAuthRepository, IAuth, IAuthData } from '@/src/modules/auth/repository/IAuthRepository'
-import { hashPassword, comparePassword, generateJWT } from '@/src/utils'
-
+import { hashPassword, comparePassword, generateJWT } from '@/src/utils/authUtils'
 export default class AuthRepository implements IAuthRepository {
   constructor (
     private readonly knek: Knex

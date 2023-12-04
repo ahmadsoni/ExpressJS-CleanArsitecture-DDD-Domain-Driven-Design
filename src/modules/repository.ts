@@ -4,6 +4,8 @@ import CouponRepository from '@/src/modules/coupon/repository/CouponRepository'
 import ProductRepository from '@/src/modules/product/repository/ProductRepository'
 import UserRepository from '@/src/modules/user/repository/UserRepository'
 import AuthRepository from '@/src/modules/auth/repository/AuthRepository'
+import CartRepository from '@/src/modules/cart/repository/CartRepository'
+
 const newCategoryRepository = (knek: Knex): CategoryRepository => {
   return new CategoryRepository(knek)
 }
@@ -23,4 +25,8 @@ const newUserRepository = (knek: Knex): UserRepository => {
 const newAuthRepository = (knek: Knex): AuthRepository => {
   return new AuthRepository(knek)
 }
-export { newCategoryRepository, newCouponRepository, newProductRepository, newUserRepository, newAuthRepository }
+
+const newCartRepository = (knek: Knex): CartRepository => {
+  return new CartRepository(knek)
+}
+export { newCategoryRepository, newCouponRepository, newProductRepository, newUserRepository, newAuthRepository, newCartRepository }

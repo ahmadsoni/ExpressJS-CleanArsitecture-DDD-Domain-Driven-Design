@@ -4,9 +4,9 @@ import knex, { type Knex } from 'knex'
 import knexConfig from '@/src/knexfile'
 import bodyParser from 'body-parser'
 import authMiddleware from '@/src/middleware/auth'
-import { newCategoryRepository, newCouponRepository, newProductRepository, newUserRepository, newAuthRepository } from '@/src/modules/repository'
-import { newCategoryUseCase, newCouponUseCase, newProductUseCase, newUserUseCase, newAuthUseCase } from '@/src/modules/usecase'
-import { newCategoryDelivery, newCouponDelivery, newProductDelivery, newUserDelivery, newAuthDelivery } from '@/src/modules/delivery'
+import { newCategoryRepository, newCouponRepository, newProductRepository, newUserRepository, newAuthRepository, newCartRepository } from '@/src/modules/repository'
+import { newCategoryUseCase, newCouponUseCase, newProductUseCase, newUserUseCase, newAuthUseCase, newCartUseCase } from '@/src/modules/usecase'
+import { newCategoryDelivery, newCouponDelivery, newProductDelivery, newUserDelivery, newAuthDelivery, newCartDelivery } from '@/src/modules/delivery'
 
 dotenv.config()
 
@@ -23,32 +23,31 @@ app.get('/', (_req: Request, res: Response) => {
   })
 })
 
-// auth domain
 const authRepository = newAuthRepository(knexInstance)
 const authUseCase = newAuthUseCase(authRepository)
 newAuthDelivery(app, authUseCase)
 
 app.use(authMiddleware)
 
-// catergory domain
 const categoriesRepository = newCategoryRepository(knexInstance)
 const categoriesUseCase = newCategoryUseCase(categoriesRepository)
 newCategoryDelivery(app, categoriesUseCase)
 
-// coupon domain
 const couponsRepository = newCouponRepository(knexInstance)
 const couponsUseCase = newCouponUseCase(couponsRepository)
 newCouponDelivery(app, couponsUseCase)
 
-// product domain
 const productsRepository = newProductRepository(knexInstance)
 const productsUseCase = newProductUseCase(productsRepository)
 newProductDelivery(app, productsUseCase)
 
-// user routes
 const usersRepository = newUserRepository(knexInstance)
 const usersUseCase = newUserUseCase(usersRepository)
 newUserDelivery(app, usersUseCase)
+
+const cartsRepository = newCartRepository(knexInstance)
+const cartsUseCase = newCartUseCase(cartsRepository)
+newCartDelivery(app, cartsUseCase)
 
 app.listen(port, () => {
   console.log(`Server is Fire at http://localhost:${port}`)

@@ -9,7 +9,7 @@
     "dev": "ts-node-dev -r tsconfig-paths/register src/index.ts eslint . --ext .ts",
     "migrate:latest": "npx knex migrate:latest --knexfile src/knexfile.ts",
     "migrate:make": "npx knex migrate:make --knexfile src/knexfile.ts",
-    "seeds:run": "npx knex seed:run --knexfile src/knexfile.ts",
+    "seeds:latest": "npx knex seed:run --knexfile src/knexfile.ts",
     "seeds:make": "npx knex seed:make --knexfile src/knexfile.ts"
   },
   "husky": {
